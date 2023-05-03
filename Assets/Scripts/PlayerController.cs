@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     public float bounceForce;
 
+    public bool stopInput;
     public void Awake()
     {
         instance= this;
@@ -41,7 +42,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+       if (!PauseMenu.instance.isPaused && !stopInput)
+        {
+
+        
         if (knockBackCounter <= 0)
         {
 
@@ -93,6 +97,7 @@ public class PlayerController : MonoBehaviour
             {
                 theRB.velocity = new Vector2(knockBackForce, theRB.velocity.y);
             }
+        }
         }
         //connecting animation values with the ones in the script, Mathf.Abs turns it into absolute value ex. -0.1 becomes 0.1
         anim.SetBool("isGrounded", isGrounded);

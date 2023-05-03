@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public static CameraController instance;
     //follow player
     public Transform target;
     //make background stay, second move slower
@@ -16,6 +17,12 @@ public class CameraController : MonoBehaviour
   //private float lastXPos, lastYPos;
     private Vector2 lastPos;
     // Start is called before the first frame update
+    public bool stopFollow;
+
+    public void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         lastPos = transform.position;
@@ -31,17 +38,21 @@ public class CameraController : MonoBehaviour
         float clampedY = Mathf.Clamp(transform.position.y, minHeight, maxHeight);
         transform.position=new Vector3(transform.position.x,clampedY, transform.position.z);
        */
-        transform.position = new Vector3(target.position.x,Mathf.Clamp(target.position.y, minHeight, maxHeight),transform.position.z);
-        
-        /*for slowly moving the background
-        float amountToMoveX = transform.position.x - lastXPos;
-        float amountToMoveY = transform.position.y - lastYPos;
-        */
-        Vector2 amountToMove = new Vector2(transform.position.x - lastPos.x, transform.position.y - lastPos.y);
-      
-        farBackground.position += new Vector3(amountToMove.x,amountToMove.y,0f);
-        middleBackground.position += new Vector3(amountToMove.x, amountToMove.y, 0f) * .5f;
-        lastPos=transform.position;
+       if(!stopFollow) 
+        {
+            transform.position = new Vector3(target.position.x, Mathf.Clamp(target.position.y, minHeight, maxHeight), transform.position.z);
+
+            /*for slowly moving the background
+            float amountToMoveX = transform.position.x - lastXPos;
+            float amountToMoveY = transform.position.y - lastYPos;
+            */
+            Vector2 amountToMove = new Vector2(transform.position.x - lastPos.x, transform.position.y - lastPos.y);
+
+            farBackground.position += new Vector3(amountToMove.x, amountToMove.y, 0f);
+            middleBackground.position += new Vector3(amountToMove.x, amountToMove.y, 0f) * .5f;
+            lastPos = transform.position;
+        }
+
 
     }
 }
